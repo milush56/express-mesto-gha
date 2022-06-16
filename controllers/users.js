@@ -9,9 +9,9 @@ module.exports.getUser = (req, res) => {
 };
 
 module.exports.getUserId = (req, res) => {
-  User.findById(req.params.id)
+  User.findById(req.params.userId)
     .then((user) => {
-      if (!User[req.params.id]) {
+      if (!user) {
         res
           .status(404)
           .send({ message: "Пользователь по указанному _id не найден." });
