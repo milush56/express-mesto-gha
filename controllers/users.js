@@ -20,6 +20,12 @@ module.exports.getUserId = (req, res) => {
       res.send({ data: user });
     })
     .catch((err) => {
+      if (err.name === "ValidationError") {
+        res.status(400).send({
+          message: "Переданы некорректные данные при создании пользователя",
+        });
+        return;
+      }
       res.status(500).send({ message: "Внутренняя ошибка сервера" });
     });
 };
@@ -67,10 +73,9 @@ module.exports.newAvatar = (req, res) => {
 };
 
 module.exports.newUser = (req, res) => {
-  const { name, about } = req.boy;
+  const { name, about } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
-
     .then((user) => {
       if (!user) {
         res
