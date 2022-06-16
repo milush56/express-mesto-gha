@@ -75,7 +75,7 @@ module.exports.newAvatar = (req, res) => {
 module.exports.newUser = (req, res) => {
   const { name, about } = req.body;
 
-  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
+  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true, upsert: true })
     .then((user) => {
       if (!user) {
         res
