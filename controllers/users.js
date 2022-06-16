@@ -45,14 +45,14 @@ module.exports.newAvatar = (req, res) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
 
-    .then((avatar) => {
-      if (!User[req.params.id]) {
+    .then((user) => {
+      if (!user) {
         res
           .status(404)
           .send({ message: "Пользователь по указанному _id не найден." });
         return;
       }
-      res.send({ data: avatar });
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
@@ -72,7 +72,7 @@ module.exports.newUser = (req, res) => {
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
 
     .then((user) => {
-      if (!User[req.params.id]) {
+      if (!user) {
         res
           .status(404)
           .send({ message: "Пользователь по указанному _id не найден." });
