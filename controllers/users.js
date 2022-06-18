@@ -23,7 +23,7 @@ module.exports.getUserId = (req, res) => {
       res.send({ data: user });
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === "CastError") {
         res.status(ERROR_CODE).send({
           message: "Переданы некорректные данные при запросе пользователя",
         });
