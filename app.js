@@ -1,4 +1,3 @@
-const path = require('path');
 const express = require('express');
 const { PORT = 3000, BASE_PATH } = process.env;
 const mongoose = require('mongoose');
@@ -19,10 +18,16 @@ app.use((req, res, next) => {
 
   next();
 });
-// подключаем мидлвары, роуты и всё остальное...
-app.use('/', require('./routes/users'));
-app.use('/', require('./routes/cards'));
+
+app.use('/users', require('./routes/users'));
+app.use('/cards', require('./routes/cards'));
+app.use('*', (req, res) => {
+  res.status(404).send({ message: "Страница не найдена"});
+});
 
 
 
-app.listen(3000);
+app.listen(PORT, () => {
+  console.log('Ссылка на сервер');
+  console.log(BASE_PATH);
+});

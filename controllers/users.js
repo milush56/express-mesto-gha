@@ -1,10 +1,13 @@
 const User = require("../models/user");
+const DEFAULT_CODE = 500;
+const NOT_FOUND_CODE = 404;
+const ERROR_CODE = 400;
 
 module.exports.getUser = (req, res) => {
   User.find({})
     .then((users) => res.send({ data: users }))
     .catch((err) =>
-      res.status(500).send({ message: "Внутренняя ошибка сервера" })
+      res.status(DEFAULT_CODE).send({ message: "Внутренняя ошибка сервера" })
     );
 };
 
@@ -13,7 +16,7 @@ module.exports.getUserId = (req, res) => {
     .then((user) => {
       if (!user) {
         res
-          .status(404)
+          .status(NOT_FOUND_CODE)
           .send({ message: "Пользователь по указанному _id не найден." });
         return;
       }
@@ -21,12 +24,12 @@ module.exports.getUserId = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(400).send({
-          message: "Переданы некорректные данные при создании пользователя",
+        res.status(ERROR_CODE).send({
+          message: "Переданы некорректные данные при запросе пользователя",
         });
         return;
       }
-      res.status(500).send({ message: "Внутренняя ошибка сервера" });
+      res.status(DEFAULT_CODE).send({ message: "Внутренняя ошибка сервера" });
     });
 };
 
@@ -38,23 +41,23 @@ module.exports.createUser = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(400).send({
+        res.status(ERROR_CODE).send({
           message: "Переданы некорректные данные при создании пользователя",
         });
         return;
       }
-      res.status(500).send({ message: "Внутренняя ошибка сервера" });
+      res.status(DEFAULT_CODE).send({ message: "Внутренняя ошибка сервера" });
     });
 };
 
 module.exports.newAvatar = (req, res) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
+  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true, upsert: true })
 
     .then((user) => {
       if (!user) {
         res
-          .status(404)
+          .status(NOT_FOUND_CODE)
           .send({ message: "Пользователь по указанному _id не найден." });
         return;
       }
@@ -62,14 +65,13 @@ module.exports.newAvatar = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(400).send({
+        res.status(ERROR_CODE).send({
           message: "Переданы некорректные данные при создании пользователя",
         });
         return;
       }
-      res.status(500).send({ message: "Внутренняя ошибка сервера" });
+      res.status(DEFAULT_CODE).send({ message: "Внутренняя ошибка сервера" });
     });
-  f;
 };
 
 module.exports.newUser = (req, res) => {
@@ -79,7 +81,7 @@ module.exports.newUser = (req, res) => {
     .then((user) => {
       if (!user) {
         res
-          .status(404)
+          .status(NOT_FOUND_CODE)
           .send({ message: "Пользователь по указанному _id не найден." });
         return;
       }
@@ -87,11 +89,11 @@ module.exports.newUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(400).send({
+        res.status(ERROR_CODE).send({
           message: "Переданы некорректные данные при создании пользователя",
         });
         return;
       }
-      res.status(500).send({ message: "Внутренняя ошибка сервера" });
+      res.status(DEFAULT_CODE).send({ message: "Внутренняя ошибка сервера" });
     });
 };
