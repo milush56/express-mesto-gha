@@ -1,9 +1,10 @@
+const bcrypt = require('bcryptjs');
 const express = require('express');
 const { PORT = 3000, BASE_PATH } = process.env;
 const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
-const { createUser, login } = require('../controllers/users');
+const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 
 app.use(bodyParser.json());
@@ -24,7 +25,17 @@ app.use('*', (req, res) => {
   res.status(404).send({ message: "Страница не найдена"});
 });
 
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
 
+  res
+    .status(statusCode)
+    .send({
+      message: statusCode === 500
+        ? 'На сервере произошла ошибка'
+        : message
+    });
+});
 
 
 app.listen(PORT, () => {

@@ -1,4 +1,4 @@
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs');
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const DEFAULT_CODE = 500;
