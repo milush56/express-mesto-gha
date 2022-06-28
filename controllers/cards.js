@@ -9,15 +9,13 @@ const ForbiddenError = require('../errors/forbidden');
 const UnAuthError = require('../errors/unauthorized');
 
 
-module.exports.getCard = (req, res) => {
+module.exports.getCard = (req, res, next) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch((next) => {
-      res.status(DEFAULT_CODE).send({ message: "Внутренняя ошибка сервера" });
-    });
+    .catch((next));
 };
 
-module.exports.createCard = (req, res) => {
+module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
 
   Card.create({ name, link, owner: req.user._id })
@@ -29,18 +27,15 @@ module.exports.createCard = (req, res) => {
         });
         return;
       }
-      res.status(DEFAULT_CODE).send({ message: "Внутренняя ошибка сервера" });
+      next(err);
     });
 };
 
-module.exports.deleteCard = (req, res) => {
+module.exports.deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       if (!card) {
-        res
-          .status(NOT_FOUND_CODE)
-          .send({ message: "Карточка с указанным _id не найдена." });
-        return;
+        throw new NotFoundError('Карточка с указанным _id не найдена.');
       }
       res.send({ data: card });
     })
@@ -51,11 +46,11 @@ module.exports.deleteCard = (req, res) => {
         });
         return;
       }
-      res.status(DEFAULT_CODE).send({ message: "Внутренняя ошибка сервера" });
+      next(err);
     });
 };
 
-module.exports.likeCard = (req, res) => {
+module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
@@ -63,10 +58,7 @@ module.exports.likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res
-          .status(NOT_FOUND_CODE)
-          .send({ message: "Карточка с указанным _id не найдена." });
-        return;
+        throw new NotFoundError('Карточка с указанным _id не найдена.');
       }
       res.send({ data: card });
     })
@@ -77,11 +69,11 @@ module.exports.likeCard = (req, res) => {
         });
         return;
       }
-      res.status(DEFAULT_CODE).send({ message: "Внутренняя ошибка сервера" });
+      next(err);
     });
 };
 
-module.exports.dislikeCard = (req, res) => {
+module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
@@ -89,10 +81,7 @@ module.exports.dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res
-          .status(NOT_FOUND_CODE)
-          .send({ message: "Карточка с указанным _id не найдена." });
-        return;
+        throw new NotFoundError('Карточка с указанным _id не найдена.');
       }
       res.send({ data: card });
     })
@@ -103,6 +92,6 @@ module.exports.dislikeCard = (req, res) => {
         });
         return;
       }
-      res.status(DEFAULT_CODE).send({ message: "Внутренняя ошибка сервера" });
+      next(err);
     });
 };
