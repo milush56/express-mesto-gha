@@ -2,11 +2,17 @@ const Card = require("../models/card");
 const DEFAULT_CODE = 500;
 const NOT_FOUND_CODE = 404;
 const ERROR_CODE = 400;
+const NotFoundError = require('../errors/not-found-err');
+const ConflictError = require('../errors/conflict');
+const BadRequestError = require('../errors/badrequest');
+const ForbiddenError = require('../errors/forbidden');
+const UnAuthError = require('../errors/unauthorized');
+
 
 module.exports.getCard = (req, res) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch((err) => {
+    .catch((next) => {
       res.status(DEFAULT_CODE).send({ message: "Внутренняя ошибка сервера" });
     });
 };
