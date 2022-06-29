@@ -1,7 +1,4 @@
 const Card = require("../models/card");
-const DEFAULT_CODE = 500;
-const NOT_FOUND_CODE = 404;
-const ERROR_CODE = 400;
 const NotFoundError = require("../errors/not-found-err");
 const ConflictError = require("../errors/conflict");
 const BadRequestError = require("../errors/badrequest");
@@ -32,7 +29,13 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.cardId)
+  Card.findById(req.params.cardId)
+    .then((card) => {
+      if (req.user._id !== card.owner) {
+        throw new ForbiddenError("Доступ запрещен.");
+      }
+      return Card.findByIdAndRemove(req.params.cardId);
+    })
     .then((card) => {
       if (!card) {
         throw new NotFoundError("Карточка с указанным _id не найдена.");
