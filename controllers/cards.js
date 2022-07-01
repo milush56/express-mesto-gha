@@ -29,7 +29,7 @@ module.exports.createCard = (req, res, next) => {
 module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .then((card) => {
-      if (req.user._id !== card.owner) {
+      if (req.user._id !== card.owner._id.toString()) {
         throw new ForbiddenError("Доступ запрещен.");
       }
       return Card.findByIdAndRemove(req.params.cardId);
