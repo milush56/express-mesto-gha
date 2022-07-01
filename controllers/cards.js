@@ -1,9 +1,7 @@
 const Card = require("../models/card");
 const NotFoundError = require("../errors/not-found-err");
-const ConflictError = require("../errors/conflict");
 const BadRequestError = require("../errors/badrequest");
 const ForbiddenError = require("../errors/forbidden");
-const UnAuthError = require("../errors/unauthorized");
 
 module.exports.getCard = (req, res, next) => {
   Card.find({})

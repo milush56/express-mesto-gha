@@ -7,8 +7,6 @@ const ERROR_CODE = 400;
 const NotFoundError = require("../errors/not-found-err");
 const ConflictError = require("../errors/conflict");
 const BadRequestError = require("../errors/badrequest");
-const ForbiddenError = require("../errors/forbidden");
-const UnAuthError = require("../errors/unauthorized");
 
 module.exports.getUser = (req, res, next) => {
   User.find({})
@@ -62,8 +60,7 @@ module.exports.createUser = (req, res, next) => {
   if (!email || !password) {
     throw new BadRequestError("Введите верный Email или пароль");
   }
-
-  User.findOne({ email })
+  return User.findOne({ email })
     .then((user) => {
       if (user) {
         throw new ConflictError(
