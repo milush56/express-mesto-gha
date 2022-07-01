@@ -8,6 +8,8 @@ const NotFoundError = require("../errors/not-found-err");
 const ConflictError = require("../errors/conflict");
 const BadRequestError = require("../errors/badrequest");
 
+
+
 module.exports.getUser = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ data: users }))
