@@ -6,6 +6,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const auth = require("./middlewares/auth");
 const { errors } = require('celebrate');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 
 app.use(bodyParser.json());
@@ -14,6 +15,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 mongoose.connect("mongodb://localhost:27017/mestodb", {
   useNewUrlParser: true,
 });
+
+app.use(requestLogger);
 
 app.use("/", require("./routes/registration"));
 
@@ -24,6 +27,8 @@ app.use("/cards", require("./routes/cards"));
 app.use("*", (req, res) => {
   res.status(404).send({ message: "Страница не найдена" });
 });
+
+app.use(errorLogger);
 
 app.use(errors());
 
