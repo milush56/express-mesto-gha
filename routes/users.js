@@ -9,6 +9,7 @@ const {
 const { celebrate, Joi } = require("celebrate");
 
 router.get("/", getUser);
+router.get("/me", getCurrentUser);
 router.get(
   "/:userId",
   celebrate({
@@ -28,12 +29,13 @@ router.patch(
   }),
   newUser
 );
-router.get("/me", getCurrentUser);
 router.patch(
   "/me/avatar",
   celebrate({
     body: Joi.object().keys({
-      avatar: Joi.string().regex(/^(https?:\/\/)?(www\.)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$/),
+      avatar: Joi.string().regex(
+        /^(https?:\/\/)?(www\.)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$/
+      ),
     }),
   }),
   newAvatar

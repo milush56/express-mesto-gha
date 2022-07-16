@@ -3,7 +3,8 @@ const allowedCors = [
   "http://testo-mesto.nomorepartiesxyz.ru",
   "http://api.testo-mesto.nomorepartiesxyz.ru",
   "https://api.testo-mesto.nomorepartiesxyz.ru",
-  "localhost:3000",
+  "http://localhost:3000",
+  "http://localhost:3001"
 ];
 
 module.exports = ((req, res, next) => {
@@ -14,7 +15,7 @@ module.exports = ((req, res, next) => {
   const requestHeaders = req.headers["access-control-request-headers"];
 
   if (allowedCors.includes(origin)) {
-    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Origin", "*");
   }
 
   if (method === "OPTIONS") {

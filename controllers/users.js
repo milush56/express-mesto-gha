@@ -39,6 +39,7 @@ module.exports.getUserId = (req, res, next) => {
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
+      console.log(user);
       if (!user) {
         throw new NotFoundError("Пользователь не найден.");
       }
@@ -158,8 +159,11 @@ module.exports.login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
+      if (!user) {
+        throw new NotFoundError("Пользователь не найден.");
+      }
       const token = jwt.sign(
-        { _id: "d285e3dceed844f902650f40" },
+        { _id: user._id },
         "some-secret-key",
         { expiresIn: "7d" }
       );
