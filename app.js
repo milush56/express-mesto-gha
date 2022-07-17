@@ -7,7 +7,8 @@ const bodyParser = require("body-parser");
 const auth = require("./middlewares/auth");
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const corps = require('./middlewares/corps');
+/* const corps = require('./middlewares/corps');*/
+const cors = require('cors');
 
 
 app.use(bodyParser.json());
@@ -17,7 +18,8 @@ mongoose.connect("mongodb://localhost:27017/mestodb", {
   useNewUrlParser: true,
 });
 
-app.use(corps);
+/* app.use(corps); */
+app.use(cors());
 
 app.use(requestLogger);
 app.get('/crash-test', () => {
