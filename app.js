@@ -1,3 +1,4 @@
+require('dotenv').config();
 const bcrypt = require("bcryptjs");
 const express = require("express");
 const { PORT = 3000, BASE_PATH } = process.env;
