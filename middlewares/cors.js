@@ -1,6 +1,8 @@
 const allowedCors = [
   "https://api.testo-mesto.nomoredomains.xyz",
+  "http://api.testo-mesto.nomoredomains.xyz",
   "https://testo-mesto.nomorepartiesxyz.ru",
+  "http://testo-mesto.nomorepartiesxyz.ru",
   "http://localhost:3000",
 ];
 
