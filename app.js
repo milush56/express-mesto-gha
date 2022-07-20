@@ -9,6 +9,7 @@ const auth = require("./middlewares/auth");
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('./middlewares/cors');
+const NotFoundError = require("./errors/not-found-err");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -18,7 +19,6 @@ mongoose.connect("mongodb://localhost:27017/mestodb", {
 });
 
 app.use(cors);
-
 
 app.use(requestLogger);
 app.get('/crash-test', () => {
@@ -34,7 +34,7 @@ app.use(auth);
 app.use("/users", require("./routes/users"));
 app.use("/cards", require("./routes/cards"));
 app.use("*", (req, res) => {
-  res.status(404).send({ message: "Страница не найдена" });
+  throw new NotFoundError('Страница не найдена');
 });
 
 app.use(errorLogger);

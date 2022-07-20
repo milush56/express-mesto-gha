@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
-require('dotenv').config();
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const DEFAULT_CODE = 500;
 const NOT_FOUND_CODE = 404;
@@ -40,11 +40,10 @@ module.exports.getUserId = (req, res, next) => {
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
-      console.log(user);
       if (!user) {
         throw new NotFoundError("Пользователь не найден.");
       }
-      res.send({ data: user });
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === "CastError") {
@@ -138,10 +137,11 @@ module.exports.newUser = (req, res, next) => {
     { new: true, runValidators: true, upsert: true }
   )
     .then((user) => {
+      console.log(user);
       if (!user) {
         throw new NotFoundError("Пользователь по указанному _id не найден.");
       }
-      res.send({ data: user });
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
@@ -165,7 +165,7 @@ module.exports.login = (req, res, next) => {
       }
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        NODE_ENV === "production" ? JWT_SECRET : "dev-secret",
         { expiresIn: "7d" }
       );
 
