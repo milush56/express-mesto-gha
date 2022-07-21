@@ -19,7 +19,7 @@ router.post(
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
       avatar: Joi.string().regex(
-        /^https?:\/\/(www\.)?[a-zA-Z\d]+\.[\w\-._~:?#[\]@!$&'()*+,;=]{2,}#?$/,
+        /^((http|https):\/\/)(www\.)?([\w\W\d]{1,})(\.)([A-Za-z]{1,10})([\w\W\d]{1,})?$/,
       ),
       email: Joi.string().required().email(),
       password: Joi.string().required().min(8),

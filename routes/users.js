@@ -34,7 +34,7 @@ router.patch(
   celebrate({
     body: Joi.object().keys({
       avatar: Joi.string().regex(
-        /^https?:\/\/(www\.)?[a-zA-Z\d]+\.[\w\-._~:?#[\]@!$&'()*+,;=]{2,}#?$/,
+        /^((http|https):\/\/)(www\.)?([\w\W\d]{1,})(\.)([A-Za-z]{1,10})([\w\W\d]{1,})?$/,
       ),
     }),
   }),

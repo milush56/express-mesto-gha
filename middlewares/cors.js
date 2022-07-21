@@ -1,6 +1,7 @@
 const allowedCors = [
   'https://api.testo-mesto.nomoredomains.xyz',
   'https://testo-mesto.nomorepartiesxyz.ru',
+  'http://localhost:3001',
 ];
 
 module.exports = ((req, res, next) => {
