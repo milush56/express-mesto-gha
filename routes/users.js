@@ -1,44 +1,44 @@
-const router = require("express").Router();
+const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
 const {
   getUser,
   getUserId,
   newUser,
   newAvatar,
   getCurrentUser,
-} = require("../controllers/users");
-const { celebrate, Joi } = require("celebrate");
+} = require('../controllers/users');
 
-router.get("/", getUser);
-router.get("/me", getCurrentUser);
+router.get('/', getUser);
+router.get('/me', getCurrentUser);
 router.get(
-  "/:userId",
+  '/:userId',
   celebrate({
     params: Joi.object().keys({
       userId: Joi.string().hex().length(24),
     }),
   }),
-  getUserId
+  getUserId,
 );
 router.patch(
-  "/me",
+  '/me',
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().required().min(2).max(30),
       about: Joi.string().required().min(2).max(30),
     }),
   }),
-  newUser
+  newUser,
 );
 router.patch(
-  "/me/avatar",
+  '/me/avatar',
   celebrate({
     body: Joi.object().keys({
       avatar: Joi.string().regex(
-        /^https?:\/\/(www\.)?[a-zA-Z\d]+\.[\w\-._~:\/?#[\]@!$&'()*+,;=]{2,}#?$/
+        /^https?:\/\/(www\.)?[a-zA-Z\d]+\.[\w\-._~:?#[\]@!$&'()*+,;=]{2,}#?$/,
       ),
     }),
   }),
-  newAvatar
+  newAvatar,
 );
 
 module.exports = router;
